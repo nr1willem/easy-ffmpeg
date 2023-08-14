@@ -1,4 +1,5 @@
 # easy-ffmpeg
-just a easy to understand bash script that helps me use ffmpeg without always typing out the same commands.
+just a simple to understand bash script that helps the use of ffmpeg.
+
 ## requirements
-ffmpeg for the actual work and vlc just for playing the media files because ffplay failed multiple times.
+´ffmpeg´ does the heavy lifting and ´vlc´ is just for playing the media files because ffplay failed multiple times.
