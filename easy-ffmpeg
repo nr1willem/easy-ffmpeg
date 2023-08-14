@@ -84,7 +84,7 @@ while true; do
 				read -e -p "image: " image
 				read -e -p "audio: " audio
 				read -e -p "output: " output
-				echo "${GREEN}ffmpeg -loop 1 -i $image -i $audio -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -shortest $output ${NC}'	
+				echo "${GREEN}ffmpeg -loop 1 -i $image -i $audio -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -shortest $output ${NC}"	
 				ffmpeg -loop 1 -i $image -i $audio -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -shortest $output
 				echo -e "${GREEN}vlc $output ${NC}"
 				vlc $output
