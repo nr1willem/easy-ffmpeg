@@ -1,7 +1,6 @@
 #!/bin/bash
 
 function display_menu() {
-    echo "select option:"
     echo "1. cut audio or video"
 	 echo "2. add audio to video"
 	 echo "3. change resolution of video"
