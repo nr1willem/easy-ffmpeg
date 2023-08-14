@@ -1,0 +1,107 @@
+#!/bin/bash
+
+function display_menu() {
+    echo "select option:"
+    echo "1. cut audio or video"
+	 echo "2. add audio to video"
+	 echo "3. change resolution of video"
+	 echo "4. compress audio file"
+	 echo "5. remove audio from video"
+	 echo "6. extract audio from video"
+	 echo "7. merge video/audio into one"
+	 echo "8. watch video/play audio"
+	 echo "9. music behind still image"
+	 echo "0. or ctrl+c to quit"
+}
+
+while true; do
+    display_menu
+    GREEN='\033[1;32m'
+	 NC='\033[0m'
+	 read -p "select option: " choice
+    case $choice in
+        1)
+				read -e -p "starting time (in HH:MM:SS.mmm format, default 00:00:00.000): " start
+            start="${start:-00:00:00.000}"
+            read -e -p "file to cut: " file
+				default_duration=$(ffprobe -i "$file" -show_entries format=duration -sexagesimal -v quiet -of csv="p=0")
+				read -e -p "ending time (in HH:MM:SS.mmm format, default is the video duration: $default_duration): " end
+				end="${end:-$default_duration}"
+				read -e -p "output: " output
+				echo -e "${GREEN}ffmpeg -ss $start -i $file -to $end -c copy $output ${NC}"
+            ffmpeg -ss "$start" -i "$file" -to "$end" -c copy "$output"
+				echo -e "${GREEN}vlc $output ${NC}"
+				vlc $output
+				;;
+        2)
+            read -e -p "video: " video 
+            read -e -p "audio: " audio
+				read -e -p "output: " output
+				echo -e "${GREEN}ffmpeg -i $video -i $audio -c:v copy -map 0:v -map 1:a -y $output ${NC}"
+            ffmpeg -i $video -i $audio -c:v copy -map 0:v -map 1:a -y $output
+				echo -e "${GREEN}vlc $output ${NC}"
+				vlc $output
+				;;
+			3)
+				read -e -p "video: " video
+				read -e -p "resolution: " resolution
+				read -e -p "output: " output
+			   echo "${GREEN}ffmpeg -i $video -s $resolution -c:a copy $output ${NC}"	
+				ffmpeg -i $video -s $resolution -c:a copy $output
+				echo -e "${GREEN}vlc $output ${NC}"
+				vlc $output
+				;; 
+			 4)
+				read -e -p "audio: " audio
+				read -e -p "new bitrate: " bitrate
+				read -e -p "output: " output
+			   echo "${GREEN}ffmpeg -i $audio -ab $bitrate $output ${NC}"
+				ffmpeg -i $audio -ab $bitrate $output
+				echo -e "${GREEN}vlc $output ${NC}"
+				vlc $output
+				;;
+			 5)
+				read -e -p "video: " video
+				read -e -p "output: " output
+			   echo "${GREEN}ffmpeg -i $video -an $output ${NC}" 	
+				ffmpeg -i $video -an $output
+				echo -e "${GREEN}vlc $output ${NC}"
+				vlc $output
+				;;
+			 6)
+				read -e -p "video: " video
+				read -e -p "output: " output
+				echo "${GREEN}ffmpeg -i $video -vn $output ${NC}"				
+				ffmpeg -i $video -vn $output
+				echo -e "${GREEN}vlc $output ${NC}"
+				vlc $output
+				;;
+			7)
+				;;
+
+			8) 
+				read -e -p "media: " media
+				echo -e "${GREEN}vlc $media ${NC}"
+				vlc $media
+				;;
+			9) 
+				read -e -p "image: " image
+				read -e -p "audio: " audio
+				read -e -p "output: " output
+				echo '${GREEN}ffmpeg -loop 1 -i $image -i $audio -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -shortest $output ${NC}'	
+				ffmpeg -loop 1 -i $image -i $audio -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -shortest $output
+				echo -e "${GREEN}vlc $output ${NC}"
+				vlc $output
+				;;
+
+			0)
+				exit 
+				;;
+			*)
+            echo "invalid choice. please select a valid option."
+            ;;
+    esac
+
+    echo
+done
+
