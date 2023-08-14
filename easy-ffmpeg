@@ -8,9 +8,8 @@ function display_menu() {
 	 echo "4. compress audio file"
 	 echo "5. remove audio from video"
 	 echo "6. extract audio from video"
-	 echo "7. merge video/audio into one"
-	 echo "8. watch video/play audio"
-	 echo "9. music behind still image"
+	 echo "7. watch video/play audio"
+	 echo "8. music behind still image"
 	 echo "0. or ctrl+c to quit"
 }
 
@@ -76,19 +75,16 @@ while true; do
 				echo -e "${GREEN}vlc $output ${NC}"
 				vlc $output
 				;;
-			7)
-				;;
-
-			8) 
+			7) 
 				read -e -p "media: " media
 				echo -e "${GREEN}vlc $media ${NC}"
 				vlc $media
 				;;
-			9) 
+			8) 
 				read -e -p "image: " image
 				read -e -p "audio: " audio
 				read -e -p "output: " output
-				echo '${GREEN}ffmpeg -loop 1 -i $image -i $audio -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -shortest $output ${NC}'	
+				echo "${GREEN}ffmpeg -loop 1 -i $image -i $audio -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -shortest $output ${NC}'	
 				ffmpeg -loop 1 -i $image -i $audio -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -shortest $output
 				echo -e "${GREEN}vlc $output ${NC}"
 				vlc $output
